@@ -1,0 +1,9 @@
+Index
+<p>
+% map.keys.map(&:last).uniq.each_with_index do |item, i|
+  <%= i %> : <a href="<%= item %>"><%= item %></a><br/>
+% end
+</p>
+<p>
+<%= yield %>
+</p>
