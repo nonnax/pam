@@ -1,0 +1,45 @@
+<% require 'kramdown' %>
+# <%= params[:name] %>, <%=params%> his is text of: <%= self.name %>
+
+
+% 10.times do 
+<%= params[:name] %>,<%=params%> this is text of: <%= self.name %>
+
+% end
+
+
+
+## routes
+% map.keys.each do |k|
+```
+  <%= k %> 
+```
+% end
+
+
+## map object
+```
+  <%= map %>
+```
+
+## params object
+
+http://url?name=nald
+
+use **params** method: <%= params %>
+
+
+## res object
+```
+  <%= res.methods.sort %>
+```
+
+## Kramdown::Document.methods
+```
+  <%= Kramdown::Document.methods.sort %>
+```
+
+## Kramdown::Document.instance_methods
+```
+  <%= Kramdown::Document.instance_methods(false).sort %>
+```

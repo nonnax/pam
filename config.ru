@@ -10,11 +10,15 @@ end
 get '/text' do 
   @name= 'ronald'
 
-  erb "<%= params[:name] %>,this is text of: <%= self.name %>"
+  erb :text
 end
 
 get '/r' do
   res.redirect '/text'
+end
+
+get '/plain' do
+  "plain text with: #{params}" 
 end
 
 post '/text' do
