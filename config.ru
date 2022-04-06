@@ -1,6 +1,16 @@
 #!/usr/bin/env ruby
 # Id$ nonnax 2022-04-06 17:16:12 +0800
 require_relative 'lib/pam'
+require 'rack/cache'
+
+use Rack::Cache,
+  metastore:    'file:/var/cache/rack/meta',
+  entitystore:  'file:/var/cache/rack/body',
+  verbose:      true
+  
+use Rack::Static,
+    urls: %w[/images /js /css],
+    root: 'public'
 
 get '/' do
   @items = map.keys.map(&:last).uniq
