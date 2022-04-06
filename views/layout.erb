@@ -1,10 +1,21 @@
-Index
-<img src="/images/banner.jpg" />
-<p>
+<html>
+  <head>
+    <link rel='stylesheet' href='/css/style.css'/>
+    <style></style>
+  </head>
+  <body>
+    <div id="banner">
+      <img src="/images/banner.jpg" />
+    </div>
+    <div id='navbar'>
 % map.keys.map(&:last).uniq.each_with_index do |item, i|
-  <%= i %> : <a href="<%= item %>?name=nald"><%= item %></a><br/>
-% end
-</p>
-<p>
-<%= yield %>
-</p>
+  <div class="item item<%=i.succ%>">    
+    <a href="<%= item %>?name=nald"><%= item %></a>
+  </div>
+% end    
+    </div>
+    <div id='container'>
+    <%= yield %>
+    </div>
+  </body>
+</html>

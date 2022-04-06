@@ -1,13 +1,14 @@
 <% require 'kramdown' %>
-# <%= params[:name] %>, <%=params%> his is text of: <%= self.name %>
 
+<div class='item' markdown=1 >
+## <%= params[:name] %>, <%=params%> his is text of: <%= self.name %>
 
 % 10.times do 
 <%= params[:name] %>,<%=params%> this is text of: <%= self.name %>
 
 % end
-
-
+</div>
+<div class='item' markdown=1 >
 
 ## routes
 % map.keys.each do |k|
@@ -16,30 +17,38 @@
 ```
 % end
 
+</div>
 
+<div class='item' markdown=1 >
 ## map object
 ```
   <%= map %>
 ```
-
+</div>
+<div class='item' markdown=1 >
 ## params object
 
 http://url?name=nald
 
 use **params** method: <%= params %>
 
-
+</div>
+<div class='item' markdown=1 >
 ## res object
 ```
   <%= res.methods.sort %>
 ```
+</div>
 
+<div class='item' markdown=1 >
 ## Kramdown::Document.methods
 ```
   <%= Kramdown::Document.methods.sort %>
 ```
-
+</div>
+<div class='item' markdown=1 >
 ## Kramdown::Document.instance_methods
 ```
   <%= Kramdown::Document.instance_methods(false).sort %>
 ```
+</div>
