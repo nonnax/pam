@@ -3,7 +3,7 @@
 require_relative 'lib/pam'
   
 use Rack::Static,
-    urls: %w[/images /js /css],
+    urls: %w[/img /js /css],
     root: 'public'
 
 get '/home' do
@@ -30,5 +30,4 @@ post '/text' do
   erb :template
 end
 
-pp Pam.map
 run Pam

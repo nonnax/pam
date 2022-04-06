@@ -5,15 +5,17 @@ require 'kramdown'
 
 D=Object.method(:define_method)
 module Pam
-  maps=Hash.new{|h,k| h[k]={}}
+  maps=Hash.new{|h,k| h[k]=nil}
   D.(:map){ maps }
   D.(:res){ @res }
   D.(:req){ @req }
   D.(:params){ @params }
   %w(GET POST PUT DELETE).map do |v|
-    D.(v.downcase){|u,&b| maps[[v, u]]=b }
+    D.(v.downcase){|u,&b| maps[[v, u]]=b unless u.match(/\./)}
   end
   def self.call(e)
+    pp Pam.map
+    
     @req=Rack::Request.new(e)
     @res=Rack::Response.new
     @params=req.params.transform_keys(&:to_sym)
@@ -29,7 +31,7 @@ module Pam
   end
   D.(:erb) do |v, **params|
     l, t=[:layout, v].map{|e| File.expand_path("../views/#{e}.erb", __dir__)}
-    text=v.is_a?(Symbol) ? File.read(t) : v.to_s
+    text=v.is_a?(Symbol) ? File.read(t) : v
     lout=File.read(l) if File.exist?(l)
     render(text)
     .then{|text| Kramdown::Document.new(text).to_html }

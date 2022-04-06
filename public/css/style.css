@@ -20,24 +20,35 @@ a{
  color: orange; 
  text-decoration: none;
 }
-#banner img{
-  /* display: flex; */
+#header, #footer{
+  display: flex;
   width: 99vw;
+  height: 8vh; 
+  background: url(/img/header-bg.jpg) center top; 
+}
+#banner img{
+  display: flex; 
+  width: 99vw;
+  height: 8vh; 
 }
 #container{
+  background: url(/img/main-bg.jpg) center top;   
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
-  width: 90vw;
+  width: 99vw;
   padding-left: 2rem;
   padding-right: 2rem;
+  min-height: calc(100vh - 16vh); 
 }
 
 .item{
-  flex: 10%;
+  flex: 1;
   padding: 1em;
   border: 1px solid silver;
+    /* <------------- required !!! */
+  /* overflow-x: auto; */
 }
 
 .item a{
@@ -56,15 +67,17 @@ a{
 #navbar{
   display: flex; 
   flex-direction: row; 
-  justify-content: space-between;
-  flex-wrap: wrap;
-  padding-left: 80vw; 
+  /* justify-content: space-between; */
+  justify-content: center; 
+  padding-left: 10px;
+
+  /* padding-left: 60vw; */
 }
 
 #navbar>div.item{
   margin-left: 2px;
   padding:0;
-  /* border: 1px solid #87b5ff; */
+  flex-grow: 2;
   border-radius: 3px; 
   font-size: 1em;
   /* background-color: #f5ca3c; */

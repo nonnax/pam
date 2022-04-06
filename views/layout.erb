@@ -4,18 +4,20 @@
     <style></style>
   </head>
   <body>
-    <div id="banner">
-      <img src="/images/banner.jpg" />
-    </div>
-    <div id='navbar'>
-% map.keys.map(&:last).uniq.each_with_index do |item, i|
-  <div class="item item<%=i.succ%>">    
-    <a href="<%= item %>?name=nald"><%= item %></a>
-  </div>
+    <div id="header">
+      <div id='navbar'>
+% map.keys.map(&:last).reject{|e| e.match(/\./)}.uniq.each_with_index do |item, i|
+        <div class="item item<%=i.succ%>">    
+          <a href="<%= item %>?name=nald"><%= item %></a>
+       </div>
 % end    
+      </div>
     </div>
     <div id='container'>
     <%= yield %>
+    </div>
+    <div id='footer'>
+    footer
     </div>
   </body>
 </html>
