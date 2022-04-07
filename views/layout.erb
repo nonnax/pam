@@ -7,7 +7,7 @@
     <div id="header">
       <div id='navbar'>
 % map.keys.map(&:last).reject{|e| e.match(/\./)}.uniq.each_with_index do |item, i|
-        <div class="item item<%=i.succ%>">    
+        <div class="navitem">    
           <a href="<%= item %>?name=nald"><%= item %></a>
        </div>
 % end    

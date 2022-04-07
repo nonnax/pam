@@ -6,6 +6,10 @@ use Rack::Static,
     urls: %w[/img /js /css],
     root: 'public'
 
+get '/' do
+  res.redirect '/home'
+end
+
 get '/home' do
   @items = map.keys.map(&:last).uniq
   erb :index
