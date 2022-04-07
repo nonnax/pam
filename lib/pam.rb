@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 # Id$ nonnax 2022-04-06 17:12:18 +0800
-require 'pp'
 require 'kramdown'
 
 D=Object.method(:define_method)
@@ -14,13 +13,10 @@ module Pam
     D.(v.downcase){|u,&b| maps[[v, u]]=b unless u.match(/\./)}
   end
   def self.call(e)
-    pp Pam.map
-    
-    @req=Rack::Request.new(e)
-    @res=Rack::Response.new
+    @req, @res=Rack::Request.new(e), Rack::Response.new
     @params=req.params.transform_keys(&:to_sym)
     res.headers['Content-type']='text/html; charset=utf-8'
-    b=map[e.values_at('REQUEST_METHOD', 'REQUEST_PATH')]
+    b=map.dup[e.values_at('REQUEST_METHOD', 'REQUEST_PATH')]
     body=instance_exec(req.params, &b) rescue nil
     res.write(body)
     res.status=404 unless b
