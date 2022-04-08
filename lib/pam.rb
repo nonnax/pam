@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # Id$ nonnax 2022-04-06 17:12:18 +0800
 require 'kramdown'
+require 'erb'
 
 D=Object.method(:define_method)
 module Pam
@@ -25,13 +26,14 @@ module Pam
   def self.render(text, b=binding, &block)
     ERB.new(text, trim_mode: '%').result(b)
   end
+
   D.(:erb) do |v, **params|
     l, t=[:layout, v].map{|e| File.expand_path("../views/#{e}.erb", __dir__)}
     text=v.is_a?(Symbol) ? File.read(t) : v
-    lout=File.read(l) if File.exist?(l)
+    lout=File.read(l) #if File.exist?(l)
     render(text)
     .then{|text| Kramdown::Document.new(text).to_html }
-    .then{|md| lout ?render(lout){md}:md }
+    .then{|md| lout ? render(lout){md}:md }
   end
 end
 

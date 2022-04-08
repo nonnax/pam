@@ -14,6 +14,10 @@ get '/tv' do
   erb :tv
 end
 
+get '/mov' do
+  erb :movie
+end
+
 get '/home' do
   @items = map.keys.map(&:last).uniq
   erb :index
@@ -40,3 +44,4 @@ end
 
 pp Pam.map
 run Pam
+

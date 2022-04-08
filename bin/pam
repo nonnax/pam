@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+# Id$ nonnax 2022-04-08 13:19:50 +0800
+require 'optparse'
+require 'fileutils'
+
+opts={}
+OptionParser.new do |o|
+  o.banner='Usage: pam --create'
+  o.on('-cNAME','--create=NAME')
+end.parse!(into: opts)
+
+case 
+when opts[:create]
+  local=opts[:create]
+  puts "creating #{local}..."
+  f=File.expand_path('../lib/pam.rb', __dir__)  
+  css=File.expand_path('../public/css/style.css', __dir__)  
+  layout=File.expand_path('../views/layout.erb', __dir__)  
+  index=File.expand_path('../views/index.erb', __dir__)  
+  FileUtils.mkdir_p "#{local}/public/css"
+  FileUtils.mkdir_p "#{local}/public/img"
+  FileUtils.mkdir_p "#{local}/views"
+  FileUtils.mkdir_p "#{local}/lib"
+  FileUtils.cp f, "#{local}/lib/"
+  FileUtils.cp css, "#{local}/public/css/"
+  FileUtils.cp [layout, index], "#{local}/views/"
+end
