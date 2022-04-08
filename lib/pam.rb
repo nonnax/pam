@@ -29,7 +29,7 @@ module Pam
   end
   def self.render(text, **opts, &block)
     b=binding
-    b.local_variable_set(:locals, opts[:locals])
+    b.local_variable_set(:locals, opts.fetch(:locals, {}))
     ERB.new(text, trim_mode: '%').result(b)
   end
 
