@@ -1,3 +1,3 @@
-pam is a http framework
+pam: an http mapping framework
 
 responses are markdown documents
