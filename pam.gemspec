@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = 'pam'
   s.version = '0.0.1'
-  s.date = 04/08/22
+  s.date = '2022-04-08'
   s.summary = "pam: an http mapping framework"
   s.authors = ["xxanon"]
   s.email = "ironald@gmail.com"
