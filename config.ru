@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # Id$ nonnax 2022-04-06 17:16:12 +0800
-# require_relative 'lib/pam'
-require 'pam'
+require_relative 'lib/pam'
+# require 'pam'
   
 use Rack::Static,
     urls: %w[/img /js /css],
@@ -12,7 +12,7 @@ get '/' do
 end
 
 get '/tv' do
-  erb :tv
+  erb :tv, title: 'tee vee'
 end
 
 get '/mov' do

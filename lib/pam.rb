@@ -10,6 +10,7 @@ module Pam
   D.(:res){ @res }
   D.(:req){ @req }
   D.(:params){ @params }
+  D.(:locals){ @locals }
   %w(GET POST PUT DELETE).map do |v|
     D.(v.downcase){|u, **opts, &b| 
        r={opts:, block: b }
@@ -26,18 +27,18 @@ module Pam
     res.status=404 unless r
     res.finish
   end
-  def self.render(text, b=binding, &block)
-    ERB.new(text, trim_mode: '%').result(b)
+  def self.render(text, **opts, &block)
+    @locals=opts
+    ERB.new(text, trim_mode: '%').result(binding)
   end
 
   D.(:erb) do |v, **locals|
-    @params.merge!(locals)
     l, t=[:layout, v].map{|e| File.expand_path("views/#{e}.erb", Dir.pwd)}
     text=v.is_a?(Symbol) ? File.read(t) : v
     lout=File.read(l) #if File.exist?(l)
-    render(text)
+    render(text, **locals)
     .then{|text| Kramdown::Document.new(text).to_html }
-    .then{|md| lout ? render(lout){md}:md }
+    .then{|md| lout ? render(lout, **locals){md}:md }
   end
 end
 
