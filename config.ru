@@ -7,7 +7,11 @@ use Rack::Static,
     root: 'public'
 
 get '/' do
-  res.redirect '/home'
+  res.redirect '/tv'
+end
+
+get '/tv' do
+  erb :tv
 end
 
 get '/home' do
@@ -34,4 +38,5 @@ post '/text' do
   erb :template
 end
 
+pp Pam.map
 run Pam
