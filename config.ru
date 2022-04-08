@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # Id$ nonnax 2022-04-06 17:16:12 +0800
-require_relative 'lib/pam'
+# require_relative 'lib/pam'
+require 'pam'
   
 use Rack::Static,
     urls: %w[/img /js /css],

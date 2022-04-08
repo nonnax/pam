@@ -28,7 +28,7 @@ module Pam
   end
 
   D.(:erb) do |v, **params|
-    l, t=[:layout, v].map{|e| File.expand_path("../views/#{e}.erb", __dir__)}
+    l, t=[:layout, v].map{|e| File.expand_path("views/#{e}.erb", Dir.pwd)}
     text=v.is_a?(Symbol) ? File.read(t) : v
     lout=File.read(l) #if File.exist?(l)
     render(text)
