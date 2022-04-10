@@ -5,7 +5,7 @@ require_relative 'lib/pam'
 
 # custom not found handler
 def Pam.not_found
-  [404, {}, ['Walastik!']]
+  res.write 'Langya!'
 end
  
 use Rack::Static,

@@ -1,18 +1,16 @@
 <html>
   <head>
-    <title><%= locals %></title>
     <link rel='stylesheet' href='/css/style.css'/>
-    <style></style>
+    <title><%=locals[:title] %></title>
   </head>
   <body>
     <div id="header">
       <div id='navbar'>
-        % map.keys.map(&:last).reject{|e| e.match(/\./)}.uniq.each_with_index
-        do |item, i|
+        <% map.keys.map(&:last).reject{|e| e.match(/\./)}.uniq.each_with_index do |item, i| %>
         <div class="navitem">
-          <a href="<%= item %>?name=nald"><%= item %></a>
+          <a href="<%= item %>"><%= item %></a>
         </div>
-        % end
+        <% end %>
       </div>
     </div>
     <div id='container'>
