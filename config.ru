@@ -12,7 +12,7 @@ get '/' do
 end
 
 get '/tv' do
-  erb :tv, locals: {title: 'tee vee'}
+  erb :tv, title: 'tee vee'
 end
 
 get '/mov' do

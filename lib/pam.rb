@@ -10,7 +10,6 @@ module Pam
   D.(:res){ @res }
   D.(:req){ @req }
   D.(:params){ @params }
-  # D.(:locals){ @locals }
   %w(GET POST PUT DELETE).map do |v|
     D.(v.downcase){|u, **opts, &b| 
        r={opts:, block: b }
@@ -29,7 +28,7 @@ module Pam
   end
   def self.render(text, **opts, &block)
     b=binding
-    b.local_variable_set(:locals, opts.fetch(:locals, {}))
+    b.local_variable_set(:locals, opts )
     ERB.new(text, trim_mode: '%').result(b)
   end
 
