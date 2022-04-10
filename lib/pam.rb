@@ -9,6 +9,8 @@ module Pam
   D.(:map){ maps }
   D.(:res){ @res }
   D.(:req){ @req }
+  D.(:default){ throw :halt, send(:not_found)  }
+  D.(:not_found){ [404, {}, ['Not Found']] } # override with def Pam.not_found(){[404, {}, ['??']]}
   D.(:params){ @params }
   %w(GET POST PUT DELETE).map do |v|
     D.(v.downcase){|u, **opts, &b| 
@@ -16,15 +18,17 @@ module Pam
        maps[[v, u]]=r unless u.match(/\./)
     }
   end
-  def self.call(e)
+  def self.call(e)    
     @req, @res=Rack::Request.new(e), Rack::Response.new
     res.headers['Content-type']='text/html; charset=utf-8'
-    r=map.dup[e.values_at('REQUEST_METHOD', 'REQUEST_PATH')]
-    @params=req.params.transform_keys(&:to_sym)
-    body=instance_exec(req.params, &r[:block]) rescue nil
-    res.write(body)
-    res.status=404 unless r
-    res.finish
+    catch(:halt) do
+      r=map.dup[e.values_at('REQUEST_METHOD', 'REQUEST_PATH')]
+      @params=req.params.transform_keys(&:to_sym)
+      body=instance_exec(req.params, &r[:block]) rescue nil
+      res.write(body)
+      default unless r
+      res.finish
+    end
   end
   def self.render(text, **opts, &block)
     b=binding

@@ -1,8 +1,13 @@
 #!/usr/bin/env ruby
 # Id$ nonnax 2022-04-06 17:16:12 +0800
-# require_relative 'lib/pam'
-require 'pam'
-  
+require_relative 'lib/pam'
+# require 'pam'
+
+# custom not found handler
+def Pam.not_found
+  [404, {}, ['Walastik!']]
+end
+ 
 use Rack::Static,
     urls: %w[/img /js /css],
     root: 'public'
@@ -42,6 +47,9 @@ post '/text' do
   @name='ronald'
   erb :template
 end
+
+
+pp Pam.methods.sort
 
 pp Pam.map
 run Pam
