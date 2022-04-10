@@ -15,14 +15,13 @@ module Pam
   }
   D.(:halt){|r| throw :halt, r}
   D.(:handle){|n, &b| handler[n]=b}
-  D.(:params){ @params }
+  D.(:params){ req.params.transform_keys(&:to_sym) }
   %w(GET POST PUT DELETE).map do |v|
     D.(v.downcase){|u, **opts, &b|  maps[[v, u]]={opts:, block: b } unless u.match(/\./) }
   end
   def self.call(e)  
     @req, @res=Rack::Request.new(e), Rack::Response.new
     res.headers['Content-type']='text/html; charset=utf-8'
-    @params=req.params.transform_keys(&:to_sym)
     catch(:halt) do
       r=map.dup[e.values_at('REQUEST_METHOD', 'REQUEST_PATH')]
       r ? handler[200]=r[:block] : default
