@@ -4,7 +4,7 @@ require_relative 'lib/pam'
 # require 'pam'
 
 # custom not found handler
-def Pam.not_found
+handle 404 do
   res.write 'Langya!'
 end
  

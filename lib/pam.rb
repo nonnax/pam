@@ -4,26 +4,31 @@
 D=Object.method(:define_method)
 module Pam
   maps=Hash.new{|h,k| h[k]=nil}
+  handlers=Hash.new{|h,k| h[k]=->(params){}}
+  D.(:handler){ handlers }
   D.(:map){ maps }
   D.(:res){ @res }
   D.(:req){ @req }
+  D.(:finish!){ 
+    instance_exec( params, &handler[res.status])
+    res.finish
+  }
   D.(:halt){|r| throw :halt, r}
-  D.(:not_found){ res.write 'Not Found' } # override with def Pam.not_found(){[404, {}, ['??']]}
+  D.(:handle){|n, &b| handler[n]=b}
   D.(:params){ @params }
   %w(GET POST PUT DELETE).map do |v|
     D.(v.downcase){|u, **opts, &b|  maps[[v, u]]={opts:, block: b } unless u.match(/\./) }
   end
-  def self.call(e)    
+  def self.call(e)  
     @req, @res=Rack::Request.new(e), Rack::Response.new
     res.headers['Content-type']='text/html; charset=utf-8'
     catch(:halt) do
       r=map.dup[e.values_at('REQUEST_METHOD', 'REQUEST_PATH')]
       @params=req.params.transform_keys(&:to_sym)
-      body=instance_exec(params, &r[:block]) rescue nil
-      res.write(body)
+      handler[200]=r[:block]  if r
       default unless r
     end
-    res.finish
+    finish!
   end
   D.(:erb) do |v, **locals|
     l, t=[:layout, v].map{|e| File.expand_path("views/#{e}.erb", Dir.pwd)}
@@ -32,11 +37,15 @@ module Pam
     render(text, **locals)
     .then{|text| Kramdown::Document.new(text).to_html }
     .then{|md| lout ? render(lout, **locals){md}:md }
+    .then{|doc| res.write doc }
   end
   def self.render(text, **opts, &block)
     b=binding; b.local_variable_set(:locals, opts )
     ERB.new(text, trim_mode: '%').result(b)
   end
-  D.(:default){ res.status=404; throw(:halt, send(:not_found))  }
+  D.(:default){ 
+      res.status=404
+      throw(:halt, res)  
+    }
 end
 
