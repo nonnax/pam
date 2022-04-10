@@ -22,11 +22,10 @@ module Pam
   def self.call(e)  
     @req, @res=Rack::Request.new(e), Rack::Response.new
     res.headers['Content-type']='text/html; charset=utf-8'
+    @params=req.params.transform_keys(&:to_sym)
     catch(:halt) do
       r=map.dup[e.values_at('REQUEST_METHOD', 'REQUEST_PATH')]
-      @params=req.params.transform_keys(&:to_sym)
-      handler[200]=r[:block]  if r
-      default unless r
+      r ? handler[200]=r[:block] : default
     end
     finish!
   end
