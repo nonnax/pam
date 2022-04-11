@@ -28,6 +28,7 @@ end
 get '/text' do |params|
   p H[env]
   res.write H[env]
+  erb :text
 end
 
 get '/r' do
@@ -35,11 +36,10 @@ get '/r' do
 end
 
 get '/plain' do
-  res.write "plain text with: #{params}" 
+  erb "plain text with: #{params}" 
 end
 
 post '/text' do
   @name='ronald'
   erb :template
 end
-
