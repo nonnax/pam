@@ -2,6 +2,7 @@
 # Id$ nonnax 2022-04-06 17:12:18 +0800
 %w(kramdown erb).map{|e| require e}
 D=Object.method(:define_method)
+class H<Hash; def self.[](*a) super.transform_keys!{|k| k.to_s.tr('.-','_').to_sym} end; end
 module Pam
   maps=Hash.new{|h,k| h[k]=nil}
   handlers=Hash.new{|h,k| h[k]=->(params){}}
@@ -9,6 +10,7 @@ module Pam
   D.(:map){ maps }
   D.(:res){ @res }
   D.(:req){ @req }
+  D.(:env){ @env }
   D.(:finish!){ 
     instance_exec( params, &handler[res.status])
     res.finish
@@ -20,7 +22,7 @@ module Pam
     D.(v.downcase){|u, **opts, &b|  maps[[v, u]]={opts:, block: b } unless u.match(/\./) }
   end
   def self.call(e)  
-    @req, @res=Rack::Request.new(e), Rack::Response.new
+    @req, @res, @env=Rack::Request.new(e), Rack::Response.new, e
     res.headers['Content-type']='text/html; charset=utf-8'
     @params=req.params.transform_keys(&:to_sym)
     catch(:halt) do
