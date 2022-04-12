@@ -26,8 +26,6 @@ get '/home' do
 end
 
 get '/text' do |params|
-  p H[env]
-  res.write H[env]
   erb :text
 end
 

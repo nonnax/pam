@@ -4,22 +4,19 @@
 D=Object.method(:define_method)
 class H<Hash; def self.[](*a) super.transform_keys!{|k| k.to_s.tr('.-','_').to_sym} end; end
 module Pam
-  maps=Hash.new{|h,k| h[k]=nil}
-  handlers=Hash.new{|h,k| h[k]=->(params){}}
-  D.(:handler){ handlers }
-  D.(:map){ maps }
-  D.(:res){ @res }
-  D.(:req){ @req }
-  D.(:env){ @env }
+  class<<self; attr :res, :req, :env end
+  maps, handlers = nil, nil # scope vars
+  D.(:handler){ handlers ||= Hash.new{|h,k| h[k]=->(params){}} }
+  D.(:map){ maps ||= Hash.new{|h,k| h[k]=nil} }
+  D.(:halt){|r| throw :halt, r}
+  D.(:handle){|n, &b| handler[n]=b}
+  D.(:params){ req.params.transform_keys(&:to_sym) }
   D.(:finish!){ 
     instance_exec( params, &handler[res.status])
     res.finish
   }
-  D.(:halt){|r| throw :halt, r}
-  D.(:handle){|n, &b| handler[n]=b}
-  D.(:params){ req.params.transform_keys(&:to_sym) }
   %w(GET POST PUT DELETE).map do |v|
-    D.(v.downcase){|u, **opts, &b|  maps[[v, u]]={opts:, block: b } unless u.match(/\./) }
+    D.(v.downcase){|u, **opts, &b|  self.class.map[[v, u]]={opts:, block: b } unless u.match(/\./) }
   end
   def self.call(e)  
     @req, @res, @env=Rack::Request.new(e), Rack::Response.new, e
@@ -43,9 +40,6 @@ module Pam
     b=binding; b.local_variable_set(:locals, opts )
     ERB.new(text, trim_mode: '%').result(b)
   end
-  D.(:default){ 
-      res.status=404
-      throw(:halt, res)  
-    }
+  D.(:default){res.status=404; throw(:halt, res) }
 end
 
