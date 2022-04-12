@@ -11,13 +11,8 @@ module Pam
   D.(:halt){|r| throw :halt, r}
   D.(:handle){|n, &b| handler[n]=b}
   D.(:params){ req.params.transform_keys(&:to_sym) }
-  D.(:finish!){ 
-    instance_exec( params, &handler[res.status])
-    res.finish
-  }
-  %w(GET POST PUT DELETE).map do |v|
-    D.(v.downcase){|u, **opts, &b|  self.class.map[[v, u]]={opts:, block: b } unless u.match(/\./) }
-  end
+  D.(:finish!){ instance_exec( params, &handler[res.status]); res.finish }
+  %w(GET POST PUT DELETE).map do |v| D.(v.downcase){|u, **opts, &b|  self.class.map[[v, u]]={opts:, block: b } unless u.match(/\./) }  end
   def self.call(e)  
     @req, @res, @env=Rack::Request.new(e), Rack::Response.new, e
     res.headers['Content-type']='text/html; charset=utf-8'
@@ -26,6 +21,12 @@ module Pam
       r ? handler[200]=r[:block] : default
     end
     finish!
+  end
+  D.(:default){res.status=404; throw(:halt, res) }
+  
+  def self.render(text, **opts, &block)
+    b=binding; b.local_variable_set(:locals, opts )
+    ERB.new(text, trim_mode: '%').result(b)
   end
   D.(:erb) do |v, **locals|
     l, t=[:layout, v].map{|e| File.expand_path("views/#{e}.erb", Dir.pwd)}
@@ -36,10 +37,5 @@ module Pam
     .then{|md| lout ? render(lout, **locals){md}:md }
     .then{|doc| res.write doc }
   end
-  def self.render(text, **opts, &block)
-    b=binding; b.local_variable_set(:locals, opts )
-    ERB.new(text, trim_mode: '%').result(b)
-  end
-  D.(:default){res.status=404; throw(:halt, res) }
 end
 
