@@ -6,7 +6,7 @@ class H<Hash; def self.[](*a) super.transform_keys!{|k| k.to_s.tr('.-','_').to_s
 module Pam
   class<<self; attr :res, :req, :env end
   maps, handlers = nil, nil # scope vars
-  D.(:handler){ handlers ||= Hash.new{|h,k| h[k]=->(params){}} }
+  D.(:handler){ handlers ||= Hash.new{|h,k| h[k]=->(params){ res.write 'Not Found' }} }
   D.(:map){ maps ||= Hash.new{|h,k| h[k]=nil} }
   D.(:halt){|r| throw :halt, r}
   D.(:handle){|n, &b| handler[n]=b}
@@ -22,7 +22,7 @@ module Pam
     end
     finish!
   end
-  D.(:default){res.status=404; throw(:halt, res) }
+  D.(:default){ res.status=404 }
   
   def self.render(text, **opts, &block)
     b=binding; b.local_variable_set(:locals, opts )
