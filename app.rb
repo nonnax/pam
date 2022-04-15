@@ -17,11 +17,11 @@ get '/tv' do
 end
 
 get '/mov' do
-  erb :movie
+  erb :movie, title: 'moo vee'
 end
 
 get '/home' do
-  @items = map.keys.map(&:last).uniq
+  # @items = map.keys.map(&:last).uniq
   erb :index
 end
 
@@ -39,5 +39,9 @@ end
 
 post '/text' do
   @name='ronald'
-  erb :template
+  res.write ':template'
+end
+
+get '/watch/:id' do |params|
+  res.redirect '/'+params[:id]
 end

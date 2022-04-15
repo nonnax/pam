@@ -1,14 +1,14 @@
 <html>
   <head>
     <link rel='stylesheet' href='/css/style.css'/>
-    <title><%=locals[:title] %></title>
+    <title><%=locals[:title]%></title>
   </head>
   <body>
     <div id="header">
       <div id='navbar'>
-        <% map.keys.map(&:last).reject{|e| e.match(/\./)}.uniq.each_with_index do |item, i| %>
+        <% map['GET'].reject{|h| h[:path_info].match?(/:/)}.each do |item| %>
         <div class="navitem">
-          <a href="<%= item %>"><%= item %></a>
+          <a href="<%= item[:path_info] %>"><%= item[:path_info] %></a>
         </div>
         <% end %>
       </div>
