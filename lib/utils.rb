@@ -25,7 +25,7 @@ class H<Hash
   
 end
 
-class H
+class H<Hash
   # auto-symbolized hash
   def self.[](**h) H.new(**h).keys_to_sym! end  
   def initialize(**h) merge!(**h).keys_to_sym! end
