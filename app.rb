@@ -1,47 +1,54 @@
 #!/usr/bin/env ruby
 # Id$ nonnax 2022-04-06 17:16:12 +0800
-require_relative 'lib/pam'
-# require 'pam'
 
-# custom not found handler
-handle 404 do
-  erb '#Nothing here!'
+require 'pam'
+require 'json'
+
+WATCHLIST='lib/watchlist.json'
+TV='lib/tv-series.json'
+MOVIES='lib/movies.json'
+
+handle 404 do 
+  res.write erb( '# Not Found')
 end
- 
+
 get '/' do
-  res.redirect '/tv'
+  res.redirect '/reviews'
 end
 
-get '/tv' do
-  erb :tv, title: 'tee vee'
+get '/tv' do |params|
+  tvdata=JSON.load(File.read TV, symbolize_names: true)
+  erb :watch, title: 'tv', data: tvdata
 end
 
-get '/mov' do
-  erb :movie, title: 'moo vee'
+get '/movie' do
+  moviedata=JSON.load(File.read MOVIES, symbolize_names: true)
+  erb :watch, title: 'movie', data: moviedata
 end
 
-get '/home' do
-  # @items = map.keys.map(&:last).uniq
-  erb :index
+get '/watchlist' do
+  watchdata=JSON.load(File.read WATCHLIST, symbolize_names: true)
+  erb :watchlist, title: 'watchlist', data: watchdata
 end
 
-get '/text' do |params|
+get '/save' do |params|
+  text=File.read(WATCHLIST) rescue ""
+  JSON.load(text)
+  .then{|watchlist|
+    watchlist||={}
+    watchlist[params[:link]]=params
+    File.write(WATCHLIST, watchlist.to_json)
+  }
+  res.redirect req.referer
+end
+
+get '/reviews' do 
+  @name= 'ronald'
   erb :text
 end
 
-get '/r' do
-  res.redirect '/text'
+get '/about' do 
+  erb :about, title: 'about'
 end
 
-get '/plain' do |params|
-  erb "plain text with query_string: #{params}" 
-end
-
-get '/name/:name' do params
-  name='ronald'
-  res.write ":template #{params}"
-end
-
-get '/watch/:id' do |params|
-  erb params[:id].to_sym rescue res.redirect '/'
-end
+pp Pam.map
