@@ -1,23 +1,24 @@
 <html>
   <head>
+    <title><%= locals[:title]  %></title>
     <link rel='stylesheet' href='/css/style.css'/>
-    <title><%=locals[:title]%></title>
+    <style></style>
   </head>
   <body>
     <div id="header">
-      <div id='navbar'>
-        <% map['GET'].reject{|h| h[:path_info].match?(/:/)}.each do |item| %>
-        <div class="navitem">
-          <a href="<%= item[:path_info] %>"><%= item[:path_info] %></a>
+      <div id='navbar', class='item'>
+         <div class="navitem">
+          <% Pam::map['GET'].reject{|e| e[:path_info].match(/:/)}.each do |item| %>
+              <a href="<%= item[:path_info] %>"><%= item[:path_info] %></a>
+          <% end %>
         </div>
-        <% end %>
       </div>
     </div>
     <div id='container'>
       <%= yield %>
     </div>
     <div id='footer'>
-      footer
+      Free as in Free Beer!
     </div>
   </body>
 </html>

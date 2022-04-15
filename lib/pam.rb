@@ -10,9 +10,11 @@ module Pam
   D.(:handler){ handlers ||= Hash.new{|h,k| h[k]=->(params){ res.write 'Not Found' }} }
   D.(:handle){|n, &b| handler[n]=b}
 
-  %w(GET POST PUT DELETE).map do |v| D.(v.downcase){|path_info, **opts, &b|
-    compiled_path, ext_params =  U(path_info).compile_path_params
-    self.class.map[v]<<({path_info:, compiled_path:, ext_params:, opts:, block: b }) unless path_info.match(/\./) }  
+  %w(GET POST PUT DELETE).map do |v| 
+    D.(v.downcase){|path_info, **opts, &b|
+      compiled_path, ext_params =  U(path_info).compile_path_params
+      self.class.map[v]<<{path_info:, compiled_path:, ext_params:, opts:, block: b }  
+    }  
   end
   def self.new
     Rack::Builder.new do

@@ -33,15 +33,15 @@ get '/r' do
   res.redirect '/text'
 end
 
-get '/plain' do
-  erb "plain text with: #{params}" 
+get '/plain' do |params|
+  erb "plain text with query_string: #{params}" 
 end
 
-post '/text' do
-  @name='ronald'
-  res.write ':template'
+get '/name/:name' do params
+  name='ronald'
+  res.write ":template #{params}"
 end
 
 get '/watch/:id' do |params|
-  res.redirect '/'+params[:id]
+  erb params[:id].to_sym rescue res.redirect '/'
 end

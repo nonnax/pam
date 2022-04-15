@@ -1,0 +1,10 @@
+@mixin important-text {
+  color: red;
+  font-size: 25px;
+  font-weight: bold;
+  @include special-border;
+}
+
+@mixin special-border {
+    border: 1px solid blue;
+}
