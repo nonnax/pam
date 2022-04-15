@@ -12,7 +12,11 @@ end.parse!(into: opts)
 def generate(local=opts[:create])  
   puts "creating #{local}..."
   f=File.expand_path('../lib/pam.rb', __dir__)  
+  rake=File.expand_path('../Rakefile', __dir__)  
+  conf=File.expand_path('../config.ru', __dir__)  
   css=File.expand_path('../public/css/style.css', __dir__)  
+  scss_style=File.expand_path('../scss/style.scss', __dir__)  
+  scss_base=File.expand_path('../scss/_base.scss', __dir__)  
   layout=File.expand_path('../views/layout.erb', __dir__)  
   index=File.expand_path('../views/index.erb', __dir__)
   
@@ -24,7 +28,11 @@ def generate(local=opts[:create])
   ).each{ |path| FileUtils.mkdir_p File.join(local, path)}
   
   FileUtils.cp f, "#{local}/lib/"
+  FileUtils.cp rake, "#{local}/"
+  FileUtils.cp conf, "#{local}/"
   FileUtils.cp css, "#{local}/public/css/"
+  FileUtils.cp scss_style, "#{local}/scss/"
+  FileUtils.cp scss_base, "#{local}/scss/"
   FileUtils.cp [layout, index], "#{local}/views/"
 end
 
