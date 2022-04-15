@@ -24,6 +24,7 @@ def generate(local=opts[:create])
     /public/css
     /public/img
     /views
+    /scss
     /lib
   ).each{ |path| FileUtils.mkdir_p File.join(local, path)}
   
