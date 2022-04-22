@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # Id$ nonnax 2022-04-06 17:16:12 +0800
 
-require './lib/pam'
+require 'pam'
 require 'json'
 
 handle 404 do 
@@ -13,12 +13,11 @@ get '/' do
 end
 
 get '/reviews' do 
-  @name= 'ronald'
   erb :text
 end
 
 get '/about' do 
-  erb '#<%=locals[:title]%>', title: 'about', markdown: 1
+  erb '#<%=locals[:title]%>', title: 'about', markdown: nil
 end
 
 pp Pam.map

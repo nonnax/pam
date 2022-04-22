@@ -7,7 +7,7 @@ module Pam
       text=v.is_a?(Symbol) ? IO.read(t) : v
       lout=IO.read(l) if File.exist?(l)
       render(text, **locals)
-      .then{|text| locals[:markdown] ? Kramdown::Document.new(text).to_html : text}
+      .then{|text| locals[:markdown] ? text : Kramdown::Document.new(text).to_html }
       .then{|md| lout ? render(lout, **locals){md}:md }
       .then{|doc| res.html doc }
     end
