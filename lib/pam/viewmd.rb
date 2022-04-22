@@ -1,13 +1,13 @@
-%w(kramdown erb).map{|e| require e}
 
 module Pam
   module Viewmd
     define_method(:erb) do |v, **locals|
+      pp locals
       l, t=[:layout, v].map{|e| File.expand_path("views/#{e}.erb", Dir.pwd)}
       text=v.is_a?(Symbol) ? IO.read(t) : v
       lout=IO.read(l) if File.exist?(l)
       render(text, **locals)
-      .then{|text| Kramdown::Document.new(text).to_html }
+      .then{|text| locals[:markdown] ? Kramdown::Document.new(text).to_html : text}
       .then{|md| lout ? render(lout, **locals){md}:md }
       .then{|doc| res.html doc }
     end

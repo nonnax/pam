@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # Id$ nonnax 2022-04-06 17:12:18 +0800
-%w(response viewmd utils).map{|e| require_relative e}
+# %w(response viewmd utils).map{|e| require_relative e}
 
 D=Object.method(:define_method)
 class H<Hash; def self.[](*a) super.transform_keys!{|k| k.to_s.tr('.-','_').to_sym} end; end
@@ -47,3 +47,6 @@ module Pam
     def default() res.status=404 end
   end
 end
+
+
+

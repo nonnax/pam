@@ -44,11 +44,8 @@ class U
   def clean_path_info() Rack::Utils.clean_path_info(base) end 
   
   def compile_path_params
-    extra_params = []
-    compiled_path = base.gsub(/:\w+/) do |match|
-      extra_params << match.gsub(':', '').to_sym
-      '([^/?#]+)'
-    end
+    extra_params =  base.scan(/:(\w+)/).flatten.map(&:to_sym)
+    compiled_path = base.gsub /:\w+/, '([^/?#]+)'
     [/^#{compiled_path}\/?$/, extra_params]
   end
   
