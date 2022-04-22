@@ -2,7 +2,6 @@
 module Pam
   module Viewmd
     define_method(:erb) do |v, **locals|
-      pp locals
       l, t=[:layout, v].map{|e| File.expand_path("views/#{e}.erb", Dir.pwd)}
       text=v.is_a?(Symbol) ? IO.read(t) : v
       lout=IO.read(l) if File.exist?(l)

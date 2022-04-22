@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 # Id$ nonnax 2022-04-06 17:12:18 +0800
 # %w(response viewmd utils).map{|e| require_relative e}
-
+H=Hash.new{|h,k|h[k]=k.transform_keys{|k| k.to_s.tr('.-','_').to_sym}}
 D=Object.method(:define_method)
-class H<Hash; def self.[](*a) super.transform_keys!{|k| k.to_s.tr('.-','_').to_sym} end; end
+# class H<Hash; def self.[](*a) super.transform_keys!{|k| k.to_s.tr('.-','_').to_sym} end; end
 module Pam
   maps, handlers = nil, nil # scope vars
   D.(:map){ maps ||= Hash.new{|h,k| h[k]=[]} }
