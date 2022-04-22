@@ -27,3 +27,18 @@ desc 'rackup'
 task run: %i[compile] do
   sh 'rackup'
 end
+
+desc "Bundle install dependencies"
+task :bundle do
+  sh "bundle install"
+end
+
+desc "Build the pam gem"
+task build: %w[bundle]  do
+  sh "gem build pam.gemspec"
+end
+
+desc "install pam-0.0.1.gem"
+task install: %w[build] do
+  sh "sudo gem install pam-0.0.1.gem"
+end
